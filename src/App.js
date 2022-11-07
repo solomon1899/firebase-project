@@ -1,7 +1,7 @@
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import "./App.css"
 
 import { useAuthState } from 'react-firebase-hooks/auth';
@@ -83,7 +83,7 @@ function ChatMessage (props) {
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
   return (
     <div className={`message ${messageClass}`}>
-    <img src={photoURL} />
+    <img src={photoURL} alt='userPhoto'/>
     <p>{text}</p>
     </div>
   )
@@ -103,6 +103,8 @@ function ChatRoom() {
   const [messages] = useCollectionData(query , {idField: 'id'}) ; /*  to understand after */
   const [formValue , setFormValue] = useState('');
 
+  const dummy = useRef()
+
   const sendMessage = async(e) => {
     e.preventDefault() ;
     const {uid , photoURL} = auth.currentUser ; 
@@ -114,6 +116,8 @@ function ChatRoom() {
     });
 
 setFormValue('');
+
+dummy.current.scrollIntoView({behavior: 'smooth'});
   }
 
 //  function changeFormValue(e) {
@@ -125,11 +129,13 @@ const changeFormValue = (e) => {
 }
 return (
   <>
-<div>
+<main>
 {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg}/>)  }
 
+<div ref={dummy}></div>
 
-</div>
+
+</main>
   
   <form onSubmit={sendMessage}> 
     <input value={formValue} onChange={changeFormValue}/>
