@@ -80,10 +80,14 @@ function SignOut() {
 function ChatMessage (props) {
   const {text , uid , photoURL  } = props.message;
 
+  console.log(photoURL);
+
   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
   return (
     <div className={`message ${messageClass}`}>
-    <img src={photoURL} alt='userPhoto'/>
+    <div style={{backgroundImage : `url(${photoURL}) `}} className = 'img' >
+
+    </div>
     <p>{text}</p>
     </div>
   )
